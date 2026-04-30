@@ -16,8 +16,11 @@ public class CharacterController {
     private final CharacterService characterService;
 
     @PostMapping("/create")
-    public ResponseEntity<BaseResponse<Void>> createCharacter(@RequestBody CreateCharacterRequestDTO request) {
-        characterService.createCharacter(request);
+    public ResponseEntity<BaseResponse<Void>> createCharacter(
+            @RequestBody CreateCharacterRequestDTO request,
+            @RequestHeader("X-User-Id") Long userId
+    ) {
+        characterService.createCharacter(request, userId);
         BaseResponse<Void> response = new BaseResponse<>(
                 CommonConstant.RESPONSE_CODE.SUCCESS,
                 CommonConstant.RESPONSE_MESSAGE.SUCCESS,
@@ -27,8 +30,10 @@ public class CharacterController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<BaseResponse<DetailCharacterResponseDTO>> getCharacterDetail() {
-        DetailCharacterResponseDTO detailCharacter = characterService.getCharacterDetail();
+    public ResponseEntity<BaseResponse<DetailCharacterResponseDTO>> getCharacterDetail(
+            @RequestHeader("X-User-Id") Long userId
+    ) {
+        DetailCharacterResponseDTO detailCharacter = characterService.getCharacterDetail(userId);
         BaseResponse<DetailCharacterResponseDTO> response = new BaseResponse<>(
                 CommonConstant.RESPONSE_CODE.SUCCESS,
                 CommonConstant.RESPONSE_MESSAGE.SUCCESS,

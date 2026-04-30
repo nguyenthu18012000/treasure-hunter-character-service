@@ -1,5 +1,6 @@
 package com.TreasureHunter.CharacterService.postgres;
 
+import com.TreasureHunter.CharacterService.pojo.entity.postgres.CharacterEntity;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,9 @@ public class CharacterRepository {
                 .fetchOne();
     }
 
-    public Character getCharacterDetail(Long userId) {
+    public CharacterEntity getCharacterDetail(Long userId) {
         return dsl.selectFrom(CHARACTER)
                 .where(CHARACTER.USER_ID.eq(userId))
-                .fetchOneInto(Character.class);
+                .fetchOneInto(CharacterEntity.class);
     }
 }

@@ -4,7 +4,7 @@ import com.TreasureHunter.CharacterService.pojo.dto.request.character.CreateChar
 import com.TreasureHunter.CharacterService.pojo.dto.response.character.DetailCharacterResponseDTO;
 
 public interface CharacterService {
-    void createCharacter(CreateCharacterRequestDTO request);
+    void createCharacter(CreateCharacterRequestDTO request, Long userId);
 
-    DetailCharacterResponseDTO getCharacterDetail();
+    DetailCharacterResponseDTO getCharacterDetail(Long userId);
 }
