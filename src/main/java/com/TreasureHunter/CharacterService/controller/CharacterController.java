@@ -1,6 +1,7 @@
 package com.TreasureHunter.CharacterService.controller;
 
 import com.TreasureHunter.CharacterService.pojo.dto.request.character.CreateCharacterRequestDTO;
+import com.TreasureHunter.CharacterService.pojo.dto.response.character.CharacterRuntimeResponseDTO;
 import com.TreasureHunter.CharacterService.pojo.dto.response.character.DetailCharacterResponseDTO;
 import com.TreasureHunter.CharacterService.service.CharacterService;
 import com.TreasureHunter.CommonLib.constant.CommonConstant;
@@ -29,15 +30,28 @@ public class CharacterController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/detail")
-    public ResponseEntity<BaseResponse<DetailCharacterResponseDTO>> getCharacterDetail(
+    @GetMapping({"/profile"})
+    public ResponseEntity<BaseResponse<DetailCharacterResponseDTO>> getCharacterProfile(
             @RequestHeader("X-User-Id") Long userId
     ) {
-        DetailCharacterResponseDTO detailCharacter = characterService.getCharacterDetail(userId);
+        DetailCharacterResponseDTO characterProfile = characterService.getCharacterProfile(userId);
         BaseResponse<DetailCharacterResponseDTO> response = new BaseResponse<>(
                 CommonConstant.RESPONSE_CODE.SUCCESS,
                 CommonConstant.RESPONSE_MESSAGE.SUCCESS,
-                detailCharacter
+                characterProfile
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping({"/state"})
+    public ResponseEntity<BaseResponse<CharacterRuntimeResponseDTO>> getCharacterState(
+            @RequestHeader("X-User-Id") Long userId
+    ) {
+        CharacterRuntimeResponseDTO characterState = characterService.getCharacterState(userId);
+        BaseResponse<CharacterRuntimeResponseDTO> response = new BaseResponse<>(
+                CommonConstant.RESPONSE_CODE.SUCCESS,
+                CommonConstant.RESPONSE_MESSAGE.SUCCESS,
+                characterState
         );
         return ResponseEntity.ok(response);
     }
