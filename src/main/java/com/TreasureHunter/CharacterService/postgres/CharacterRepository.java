@@ -71,4 +71,21 @@ public class CharacterRepository {
 
         return response;
     }
+
+    public void upsertCharacterState(UUID characterId, Double posX, Double posY) {
+        dsl.insertInto(CHARACTER_STATE)
+                .set(CHARACTER_STATE.CHARACTER_ID, characterId)
+                .set(CHARACTER_STATE.POS_X, posX)
+                .set(CHARACTER_STATE.POS_Y, posY)
+                .onConflict(CHARACTER_STATE.CHARACTER_ID)
+                .doUpdate()
+                .set(CHARACTER_STATE.POS_X, posX)
+                .set(CHARACTER_STATE.POS_Y, posY)
+                .execute();
+
+        dsl.update(CHARACTER)
+                .set(CHARACTER.UPDATED_AT, LocalDateTime.now())
+                .where(CHARACTER.ID.eq(characterId))
+                .execute();
+    }
 }
