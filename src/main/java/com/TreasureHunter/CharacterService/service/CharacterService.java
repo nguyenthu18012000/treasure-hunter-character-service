@@ -14,5 +14,7 @@ public interface CharacterService {
 
     CharacterRuntimeResponseDTO getCharacterState(Long userId);
 
+    CharacterRuntimeResponseDTO getCharacterStateById(UUID characterId);
+
     void saveCharacterState(UUID characterId, SaveCharacterStateRequestDTO request);
 }

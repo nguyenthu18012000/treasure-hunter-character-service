@@ -13,7 +13,14 @@ spring:
   jooq:
     sql-dialect: POSTGRES
 
+  kafka:
+    bootstrap-servers: localhost:9092   # Kafka chạy bằng docker compose trong treasure-hunter-infra
+
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+  instance:
+    # Đăng ký bằng IP: hostname của máy (DESKTOP-...mshome.net) mất ~4s để phân giải,
+    # làm Feign từ socket-service bị timeout
+    prefer-ip-address: true

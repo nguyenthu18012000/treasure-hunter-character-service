@@ -5,6 +5,7 @@ import com.TreasureHunter.CharacterService.pojo.dto.response.character.Character
 import com.TreasureHunter.CharacterService.pojo.dto.response.character.CharacterStatsInfoDTO;
 import com.TreasureHunter.CharacterService.pojo.dto.response.character.DetailCharacterResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Record5;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,14 @@ public class CharacterRepository {
     }
 
     public CharacterRuntimeResponseDTO getCharacterState(Long userId) {
+        return findCharacterState(CHARACTER.USER_ID.eq(userId));
+    }
+
+    public CharacterRuntimeResponseDTO getCharacterStateById(UUID characterId) {
+        return findCharacterState(CHARACTER.ID.eq(characterId));
+    }
+
+    private CharacterRuntimeResponseDTO findCharacterState(Condition condition) {
         Record5<UUID, String, Double, Double, Double> record = dsl.select(
                         CHARACTER.ID,
                         CHARACTER.NAME,
@@ -49,7 +58,7 @@ public class CharacterRepository {
                 .on(CHARACTER_STATE.CHARACTER_ID.eq(CHARACTER.ID))
                 .leftJoin(CHARACTER_STATS)
                 .on(CHARACTER_STATS.CHARACTER_ID.eq(CHARACTER.ID))
-                .where(CHARACTER.USER_ID.eq(userId))
+                .where(condition)
                 .fetchOne();
 
         if (record == null) {

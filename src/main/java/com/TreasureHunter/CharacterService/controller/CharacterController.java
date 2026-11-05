@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/character")
 @RequiredArgsConstructor
@@ -52,6 +54,19 @@ public class CharacterController {
                 CommonConstant.RESPONSE_CODE.SUCCESS,
                 CommonConstant.RESPONSE_MESSAGE.SUCCESS,
                 characterState
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    /** Cho socket-service lấy vị trí đã lưu khi người chơi vào game (gọi qua Feign, không qua gateway). */
+    @GetMapping("/internal/{characterId}/state")
+    public ResponseEntity<BaseResponse<CharacterRuntimeResponseDTO>> getCharacterStateById(
+            @PathVariable UUID characterId
+    ) {
+        BaseResponse<CharacterRuntimeResponseDTO> response = new BaseResponse<>(
+                CommonConstant.RESPONSE_CODE.SUCCESS,
+                CommonConstant.RESPONSE_MESSAGE.SUCCESS,
+                characterService.getCharacterStateById(characterId)
         );
         return ResponseEntity.ok(response);
     }

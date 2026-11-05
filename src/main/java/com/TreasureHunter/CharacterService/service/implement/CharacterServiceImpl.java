@@ -38,6 +38,12 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     @Override
+    public CharacterRuntimeResponseDTO getCharacterStateById(UUID characterId) {
+        log.debug("Getting character state for characterId: {}", characterId);
+        return characterRepository.getCharacterStateById(characterId);
+    }
+
+    @Override
     @Transactional
     public void saveCharacterState(UUID characterId, SaveCharacterStateRequestDTO request) {
         if (characterId == null || request == null || request.getPosX() == null || request.getPosY() == null) {
