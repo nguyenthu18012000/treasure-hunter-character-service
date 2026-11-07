@@ -24,3 +24,11 @@ eureka:
     # Đăng ký bằng IP: hostname của máy (DESKTOP-...mshome.net) mất ~4s để phân giải,
     # làm Feign từ socket-service bị timeout
     prefer-ip-address: true
+
+treasure-hunter:
+  character:
+    # Điểm cộng chỉ số: tổng điểm = start-points + (level - 1) * points-per-level
+    # Chỉ số mỗi điểm cấu hình ở bảng stat_config.
+    stat-points:
+      start-points: 5
+      points-per-level: 3

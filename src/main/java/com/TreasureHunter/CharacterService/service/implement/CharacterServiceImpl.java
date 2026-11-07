@@ -1,5 +1,6 @@
 package com.TreasureHunter.CharacterService.service.implement;
 
+import com.TreasureHunter.CharacterService.stat.CharacterStatService;
 import com.TreasureHunter.CharacterService.pojo.dto.request.character.CreateCharacterRequestDTO;
 import com.TreasureHunter.CharacterService.pojo.dto.request.character.SaveCharacterStateRequestDTO;
 import com.TreasureHunter.CharacterService.pojo.dto.response.character.CharacterRuntimeResponseDTO;
@@ -19,10 +20,14 @@ import java.util.UUID;
 public class CharacterServiceImpl implements CharacterService {
 
     private final CharacterRepository characterRepository;
+    private final CharacterStatService characterStatService;
 
     @Override
+    @Transactional
     public void createCharacter(CreateCharacterRequestDTO request, Long userId) {
-        characterRepository.insertCharacter(request.getCharacterName(), userId);
+        // Không cần lưu chỉ số: nhân vật mới chưa cộng điểm nào, chỉ số = base_value trong stat_config
+        UUID characterId = characterRepository.insertCharacter(request.getCharacterName(), userId);
+        log.info("Created character {} for userId {}", characterId, userId);
     }
 
     @Override
@@ -34,13 +39,20 @@ public class CharacterServiceImpl implements CharacterService {
     @Override
     public CharacterRuntimeResponseDTO getCharacterState(Long userId) {
         log.info("Getting character state for userId: {}", userId);
-        return characterRepository.getCharacterState(userId);
+        return withStats(characterRepository.getCharacterState(userId));
     }
 
     @Override
     public CharacterRuntimeResponseDTO getCharacterStateById(UUID characterId) {
         log.debug("Getting character state for characterId: {}", characterId);
-        return characterRepository.getCharacterStateById(characterId);
+        return withStats(characterRepository.getCharacterStateById(characterId));
+    }
+
+    private CharacterRuntimeResponseDTO withStats(CharacterRuntimeResponseDTO runtime) {
+        if (runtime != null) {
+            runtime.setStats(characterStatService.calculateStats(runtime.getCharacterId()));
+        }
+        return runtime;
     }
 
     @Override
